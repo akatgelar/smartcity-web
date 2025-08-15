@@ -8,6 +8,39 @@ use Illuminate\Support\Facades\Storage;
 class MinioController extends Controller
 {
 
+    /**
+     * @OA\Post(
+     *     path="/upload",
+     *     tags={"Upload"},
+     *     summary="",
+     *     description="upload data",
+     *     operationId="upload",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property(
+     *                      property="name",
+     *                      type="string"
+     *                  ),
+     *              )
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="OK",
+     *         @OA\MediaType(
+     *              mediaType="application/json",
+     *              example={
+     *                  "success"=true,
+     *                  "message"="Insert Data Successfull",
+     *                  "data"={}
+     *              }
+     *         )
+     *     )
+     * )
+     */
     public function upload(Request $request)
     {
         if ($request->hasFile('file')) {

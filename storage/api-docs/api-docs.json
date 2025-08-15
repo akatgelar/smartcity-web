@@ -1,0 +1,78 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Documentation",
+        "description": "Made with ❤ by citiasia.",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "email": "dev@citiasiainc.id"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/upload": {
+            "post": {
+                "tags": [
+                    "Upload"
+                ],
+                "summary": "",
+                "description": "upload data",
+                "operationId": "upload",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "default": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "message": "Insert Data Successfull",
+                                    "data": []
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "name": "bearerAuth",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Upload",
+            "description": "Upload"
+        }
+    ]
+}
