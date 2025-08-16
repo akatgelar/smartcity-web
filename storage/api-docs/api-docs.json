@@ -2,10 +2,10 @@
     "openapi": "3.0.0",
     "info": {
         "title": "API Documentation",
-        "description": "Made with ❤ by citiasia.",
+        "description": "Made with ❤ by akatgelar.",
         "termsOfService": "http://swagger.io/terms/",
         "contact": {
-            "email": "dev@citiasiainc.id"
+            "email": "info@akatgelar.app"
         },
         "license": {
             "name": "Apache 2.0",
@@ -14,14 +14,54 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/upload": {
-            "post": {
+        "/minio/get": {
+            "get": {
                 "tags": [
-                    "Upload"
+                    "Minio"
                 ],
                 "summary": "",
-                "description": "upload data",
-                "operationId": "upload",
+                "description": "minio get",
+                "operationId": "minio_get",
+                "parameters": [
+                    {
+                        "name": "path",
+                        "in": "query",
+                        "description": "path value is string. ex : ?path=xxx.jpg",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "default": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "message": "Get Data Successfull",
+                                    "data": []
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/minio/upload": {
+            "post": {
+                "tags": [
+                    "Minio"
+                ],
+                "summary": "",
+                "description": "monio upload",
+                "operationId": "monio_upload",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -43,7 +83,7 @@
                             "application/json": {
                                 "example": {
                                     "success": true,
-                                    "message": "Insert Data Successfull",
+                                    "message": "File uploaded successfully",
                                     "data": []
                                 }
                             }
@@ -71,8 +111,8 @@
     },
     "tags": [
         {
-            "name": "Upload",
-            "description": "Upload"
+            "name": "Minio",
+            "description": "Minio"
         }
     ]
 }

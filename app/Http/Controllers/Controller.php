@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 /**
  * @OA\Info(
- *     description="Made with ❤ by citiasia.",
+ *     description="Made with ❤ by akatgelar.",
  *     version="1.0.0",
  *     title="API Documentation",
  *     termsOfService="http://swagger.io/terms/",
  *     @OA\Contact(
- *         email="dev@citiasiainc.id"
+ *         email="info@akatgelar.app"
  *     ),
  *     @OA\License(
  *         name="Apache 2.0",
