@@ -4,17 +4,62 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Resources\ApiResource;
 
 class MinioController extends Controller
 {
+    /**
+     * @OA\Get(
+     *     path="/minio/get",
+     *     tags={"Minio"},
+     *     summary="",
+     *     description="minio get",
+     *     operationId="minio_get",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *          name="path",
+     *          description="path value is string. ex : ?path=xxx.jpg",
+     *          required=false,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="OK",
+     *         @OA\MediaType(
+     *              mediaType="application/json",
+     *              example={
+     *                  "success"=true,
+     *                  "message"="Get Data Successfull",
+     *                  "data"={}
+     *              }
+     *         )
+     *     )
+     * )
+     */
+    public function get(Request $request)
+    {
+        $path = $request->has('path') ? $request->get('path') : '';
+        $expirationTime = now()->addMinutes(5);
+        $temporaryUrl = Storage::disk('minio')->temporaryUrl($path, $expirationTime);
+
+        $message = 'Success get data.';
+        $data = $temporaryUrl;
+        $metadata = [];
+
+        return new ApiResource(200, true, $message, $data, $metadata);
+
+    }
 
     /**
      * @OA\Post(
-     *     path="/upload",
-     *     tags={"Upload"},
+     *     path="/minio/upload",
+     *     tags={"Minio"},
      *     summary="",
-     *     description="upload data",
-     *     operationId="upload",
+     *     description="monio upload",
+     *     operationId="monio_upload",
      *     security={{"bearerAuth":{}}},
      *     @OA\RequestBody(
      *          @OA\MediaType(
@@ -34,7 +79,7 @@ class MinioController extends Controller
      *              mediaType="application/json",
      *              example={
      *                  "success"=true,
-     *                  "message"="Insert Data Successfull",
+     *                  "message"="File uploaded successfully",
      *                  "data"={}
      *              }
      *         )
@@ -54,16 +99,27 @@ class MinioController extends Controller
             $fileName = date('YmdHis') . '_' . $file->getClientOriginalName();
             $path = Storage::disk('minio')->putFileAs('', $file, $fileName);
 
-            // Optional: Store the file path in your database
-            // $filePath = Storage::disk('s3')->url($path);
-            // YourModel::create(['file_path' => $filePath]);
+            $message = 'File uploaded successfully';
+            $data = [];
+            $data['original_name'] = $file->getClientOriginalName();
+            $data['mime_type'] = $file->getClientMimeType();
+            $data['path'] = $path;
+            $metadata = [];
 
-            return response()->json(['message' => 'File uploaded successfully', 'path' => $path], 200);
+            return new ApiResource(200, true, $message, $data, $metadata);
 
         } else {
-            return response()->json(['message' => 'No file uploaded'], 400);
+            $message = 'No file uploaded';
+            $data = [];
+            $metadata = [];
+
+            return new ApiResource(400, false, $message, $data, $metadata);
         }
 
-        return response()->json(['message' => 'Internal Error'], 500);
+        $message = 'Internal Error';
+        $data = [];
+        $metadata = [];
+
+        return new ApiResource(500, false, $message, $data, $metadata);
     }
 }
