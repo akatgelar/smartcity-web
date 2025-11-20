@@ -39,7 +39,7 @@ class Handler
         }
 
         $response = [
-            'success' => false,
+            'status' => false,
             'status_code' => $statusCode,
             'message' => 'Unknown error',
             'data' => [],
