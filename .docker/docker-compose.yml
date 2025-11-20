@@ -7,5 +7,5 @@ services:
     env_file:
       - .env
     ports:
-      - 2051:80"
+      - "2051:80"
     restart: always
