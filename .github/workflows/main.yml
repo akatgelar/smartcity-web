@@ -76,8 +76,10 @@ jobs:
           script: |
             echo "${{ secrets.PACKAGE_TOKEN }}" | sudo docker login ghcr.io -u ${{ secrets.PACKAGE_USERNAME }} --password-stdin
             cd /home/app/smartcity-web/
+            cp retrieved/docker-compose.yml
+            sudo rm -rf retrieved
             sudo rm -f .env
-            printf "DOCKER_IMAGE_VERSION=${{ needs.build.outputs.image_version }}" > .env
+            printf "DOCKER_IMAGE_VERSION=${{ needs.build.outputs.image_version }}\n" > .env
             printf "$ENV" >> .env
             sudo docker compose stop
             sudo docker compose rm -f
