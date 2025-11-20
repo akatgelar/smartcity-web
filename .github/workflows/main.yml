@@ -63,7 +63,6 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           source: ./retrieved/docker-compose.yml
           target: /home/app/smartcity-web/
-          strip_components: 1
 
       - name: Running docker-compose script
         uses: appleboy/ssh-action@master
@@ -77,7 +76,7 @@ jobs:
           script: |
             echo "${{ secrets.PACKAGE_TOKEN }}" | sudo docker login ghcr.io -u ${{ secrets.PACKAGE_USERNAME }} --password-stdin
             cd /home/app/smartcity-web/
-            sudo rm .env
+            sudo rm -f .env
             printf "DOCKER_IMAGE_VERSION=${{ needs.build.outputs.image_version }}" > .env
             printf "$ENV" > .env
             sudo docker compose stop
