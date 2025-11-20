@@ -42,15 +42,23 @@ class MinioController extends Controller
     public function get(Request $request)
     {
         $path = $request->has('path') ? $request->get('path') : '';
-        $expirationTime = now()->addMinutes(5);
-        $temporaryUrl = Storage::disk('minio')->temporaryUrl($path, $expirationTime);
 
-        $message = 'Success get data.';
-        $data = $temporaryUrl;
-        $metadata = [];
+        if($path) {
+            $expirationTime = now()->addMinutes(5);
+            $temporaryUrl = Storage::disk('minio')->temporaryUrl($path, $expirationTime);
 
-        return new ApiResource(200, true, $message, $data, $metadata);
+            $message = 'Success get data.';
+            $data = $temporaryUrl;
+            $metadata = [];
 
+            return new ApiResource(200, true, $message, $data, $metadata);
+        } else {
+            $message = 'Param path is empty';
+            $data = [];
+            $metadata = [];
+
+            return new ApiResource(400, false, $message, $data, $metadata);
+        }
     }
 
     /**
