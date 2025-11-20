@@ -1,0 +1,87 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build docker image
+    runs-on: ubuntu-latest
+    outputs:
+      image_version: ${{ steps.set_version.outputs.image_version }}
+    steps:
+
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+
+      - name: Login to Dockerhub
+        uses: docker/login-action@v1
+        with:
+          registry: https://ghcr.io
+          username: ${{ secrets.PACKAGE_USERNAME }}
+          password: ${{ secrets.PACKAGE_TOKEN }}
+
+      - name: Set timezone to Asia/Jakarta
+        uses: szenius/set-timezone@v2.0
+        with:
+          timezoneLinux: "Asia/Jakarta"
+
+      - name: Set docker image version
+        id: set_version
+        run: echo "image_version=$(date +'%Y%m%d.%H%M%S')" >> $GITHUB_OUTPUT
+
+      - name: Build and push Docker image
+        run: |
+          docker build -t ghcr.io/akatgelar/smartcity-web:${{ steps.set_version.outputs.image_version }} -f .docker/Dockerfile .
+          docker push ghcr.io/akatgelar/smartcity-web:${{ steps.set_version.outputs.image_version }}
+
+      - name: Upload docker-compose as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-compose
+          path: .docker/docker-compose.yml
+
+  deploy:
+    name: Deploy to server
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+
+      - name: Download docker-compose artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-compose
+          path: ./retrieved
+
+      - name: Copy docker-compose file to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          source: .docker/docker-compose.yml
+          target: /home/app/smartcity-web/
+          strip_components: 1
+
+      - name: Running docker-compose script
+        uses: appleboy/ssh-action@master
+        env:
+          ENV: ${{ secrets.ENV }}
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          envs: ENV
+          script: |
+            cd /home/app/smartcity-web/
+            echo "${{ secrets.PACKAGE_TOKEN }}" | sudo docker login ghcr.io -u ${{ secrets.PACKAGE_USERNAME }} --password-stdin
+            sudo rm .env
+            printf "DOCKER_IMAGE_VERSION=${{ needs.build.outputs.image_version }}" > .env
+            printf "$ENV" > .env
+            sudo docker compose stop
+            sudo docker compose rm -f
+            sudo docker compose pull
+            sudo docker compose up -d
+            sudo docker exec smartcity-web php /var/www/artisan migrate --force

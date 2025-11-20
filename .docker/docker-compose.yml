@@ -1,0 +1,11 @@
+services:
+  web:
+    # build: .
+    image: "ghcr.io/akatgelar/smartcity-web:${DOCKER_IMAGE_VERSION}"
+    container_name: 'smartcity-web'
+    user: 'www-data:www-data'
+    env_file:
+      - .env
+    ports:
+      - 2051:80"
+    restart: always
