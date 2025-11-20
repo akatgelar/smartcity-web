@@ -1,6 +1,6 @@
 <template>
     <AdminLayout>
-        <PageBreadcrumb parent-page="User Level" parent-link="/admin/user-level" child-page="Edit" child-link=""/>
+        <PageBreadcrumb parent-page="User Level" parent-link="/admin/user-level" child-page="Edit" child-link="" page-title=""/>
 
         <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
             <div class="flex flex-col justify-between gap-5 border-gray-200 px-5 py-4 sm:flex-row sm:items-center dark:border-gray-800">

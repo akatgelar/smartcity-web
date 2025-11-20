@@ -8,9 +8,9 @@
         <li>
           <router-link
             class="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400"
-            to="/"
+            :to="parentLink"
           >
-            Home
+            {{ parentPage }}
             <svg
               class="stroke-current"
               width="17"
@@ -29,8 +29,13 @@
             </svg>
           </router-link>
         </li>
-        <li class="text-sm text-gray-800 dark:text-white/90">
-          {{ pageTitle }}
+        <li>
+          <router-link
+            class="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400"
+            :to="childLink"
+          >
+            {{ childPage }}
+          </router-link>
         </li>
       </ol>
     </nav>
@@ -40,9 +45,11 @@
 <script setup lang="ts">
 import { defineProps } from 'vue'
 
-interface BreadcrumbProps {
-  pageTitle: string
-}
-
-defineProps<BreadcrumbProps>()
+defineProps<{
+  pageTitle: string,
+  parentPage: string,
+  parentLink: string,
+  childPage: string,
+  childLink: string
+}>()
 </script>
