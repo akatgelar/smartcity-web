@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\ApiResource;
@@ -51,13 +52,13 @@ class MinioController extends Controller
             $data = $temporaryUrl;
             $metadata = [];
 
-            return new ApiResource(200, true, $message, $data, $metadata);
+            return new ApiResource(true, 200, $message, $data, $metadata);
         } else {
             $message = 'Param path is empty';
             $data = [];
             $metadata = [];
 
-            return new ApiResource(400, false, $message, $data, $metadata);
+            return new ApiResource(false, 400, $message, $data, $metadata);
         }
     }
 
@@ -114,20 +115,20 @@ class MinioController extends Controller
             $data['path'] = $path;
             $metadata = [];
 
-            return new ApiResource(200, true, $message, $data, $metadata);
+            return new ApiResource(true, 200, $message, $data, $metadata);
 
         } else {
             $message = 'No file uploaded';
             $data = [];
             $metadata = [];
 
-            return new ApiResource(400, false, $message, $data, $metadata);
+            return new ApiResource(false, 400, $message, $data, $metadata);
         }
 
         $message = 'Internal Error';
         $data = [];
         $metadata = [];
 
-        return new ApiResource(500, false, $message, $data, $metadata);
+        return new ApiResource(false, 500, $message, $data, $metadata);
     }
 }
