@@ -10,7 +10,9 @@
         "darkaonline/l5-swagger": "^9.0",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
-        "league/flysystem-aws-s3-v3": "^3.29"
+        "league/flysystem-aws-s3-v3": "^3.29",
+        "php-open-source-saver/jwt-auth": "^2.8",
+        "richan-fongdasen/eloquent-blameable": "^1.11"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.16",
