@@ -78,7 +78,7 @@ jobs:
             cd /home/app/smartcity-web/
             sudo rm -f .env
             printf "DOCKER_IMAGE_VERSION=${{ needs.build.outputs.image_version }}" > .env
-            printf "$ENV" > .env
+            printf "$ENV" >> .env
             sudo docker compose stop
             sudo docker compose rm -f
             sudo docker compose pull
