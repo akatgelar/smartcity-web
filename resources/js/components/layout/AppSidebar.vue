@@ -1,7 +1,7 @@
 <template>
   <aside
     :class="[
-      'fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-99999 border-r border-gray-200',
+      'fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-9 border-r border-gray-200',
       {
         'lg:w-[290px]': isExpanded || isMobileOpen || isHovered,
         'lg:w-[90px]': !isExpanded && !isHovered,
@@ -19,30 +19,14 @@
         !isExpanded && !isHovered ? 'lg:justify-center' : 'justify-start',
       ]"
     >
-      <router-link to="/">
-        <img
-          v-if="isExpanded || isHovered || isMobileOpen"
-          class="dark:hidden"
-          src="/resources/images/logo/logo.svg"
-          alt="Logo"
-          width="150"
-          height="40"
-        />
-        <img
-          v-if="isExpanded || isHovered || isMobileOpen"
-          class="hidden dark:block"
-          src="/resources/images/logo/logo-dark.svg"
-          alt="Logo"
-          width="150"
-          height="40"
-        />
-        <img
-          v-else
-          src="/resources/images/logo/logo-icon.svg"
-          alt="Logo"
-          width="32"
-          height="32"
-        />
+      <router-link to="/" >
+        <div class="flex" v-if="isExpanded || isHovered || isMobileOpen">
+            <MinioImage v-if="appSetting['logo']" :path="appSetting['logo']" alt="Logo" :width="40" :height="40" />
+            <h1 class="text-black text-xl my-auto pl-3">{{ appSetting['title'] }}</h1>
+        </div>
+        <div class="flex" v-else>
+            <MinioImage v-if="appSetting['logo']" :path="appSetting['logo']" alt="Logo" :width="40" :height="40" />
+        </div>
       </router-link>
     </div>
     <div
@@ -211,54 +195,80 @@
   </aside>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from "vue";
 import { useRoute } from "vue-router";
 
 import {
   GridIcon,
   CalenderIcon,
-  UserCircleIcon,
-  ChatIcon,
-  MailIcon,
-  DocsIcon,
-  PieChartIcon,
   ChevronDownIcon,
   HorizontalDots,
-  PageIcon,
-  TableIcon,
-  ListIcon,
-  PlugInIcon,
 } from "../../icons";
-import SidebarWidget from "./SidebarWidget.vue";
-import BoxCubeIcon from "../../icons/BoxCubeIcon.vue";
 import { useSidebar } from "../useSidebar";
+import MinioImage from "../ui/MinioImage.vue";
+import UserCircleIcon from "../../icons/UserCircleIcon.vue";
+import UserGroupIcon from "../../icons/UserGroupIcon.vue";
+import SettingsIcon from "../../icons/SettingsIcon.vue";
 
+const appSetting = ref(window['appSetting'])
 const route = useRoute();
 
 const { isExpanded, isMobileOpen, isHovered, openSubmenu } = useSidebar();
 
-const menuGroups = [
+interface MenuItem {
+  icon: any; // Replace `any` with the actual icon type if available
+  name: string;
+  path: string;
+  pro?: boolean; // Optional 'pro' property
+  new?: boolean; // Optional 'pro' property
+  subItems?: MenuItem[]; // Optional nested items
+}
+
+interface MenuGroup {
+  title: string;
+  items: MenuItem[];
+}
+
+
+const menuGroups : MenuGroup[] = [
   {
     title: "Menus",
     items: [
       {
         icon: GridIcon,
         name: "Dashboard",
-        path: "/admin/",
+        path: "/admin/dashboard",
       },
       {
-        icon: CalenderIcon,
-        name: "Calendar",
-        path: "/admin/calendar",
+        icon: UserCircleIcon,
+        name: "User",
+        path: "/admin/user",
+      },
+      {
+        icon: UserGroupIcon,
+        name: "User Level",
+        path: "/admin/user-level",
+      },
+      {
+        icon: SettingsIcon,
+        name: "Setting",
+        path: "/admin/setting",
       },
     ]
   }
 ];
 
-const isActive = (path) => route.path === path;
+const isActive = (path: string) => {
+    if((route.path+'/').startsWith(path+'/')) {
+        return true
+    } else {
+        return false
+    }
+    route.path === path
+};
 
-const toggleSubmenu = (groupIndex, itemIndex) => {
+const toggleSubmenu = (groupIndex: any, itemIndex: any) => {
   const key = `${groupIndex}-${itemIndex}`;
   openSubmenu.value = openSubmenu.value === key ? null : key;
 };
@@ -272,7 +282,7 @@ const isAnySubmenuRouteActive = computed(() => {
   );
 });
 
-const isSubmenuOpen = (groupIndex, itemIndex) => {
+const isSubmenuOpen = (groupIndex: number, itemIndex: number) => {
   const key = `${groupIndex}-${itemIndex}`;
   return (
     openSubmenu.value === key ||
@@ -283,7 +293,7 @@ const isSubmenuOpen = (groupIndex, itemIndex) => {
   );
 };
 
-const startTransition = (el) => {
+const startTransition = (el: any) => {
   el.style.height = "auto";
   const height = el.scrollHeight;
   el.style.height = "0px";
@@ -291,7 +301,7 @@ const startTransition = (el) => {
   el.style.height = height + "px";
 };
 
-const endTransition = (el) => {
+const endTransition = (el: any) => {
   el.style.height = "";
 };
 </script>
