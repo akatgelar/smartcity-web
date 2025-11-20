@@ -159,40 +159,36 @@ declare global {
 
 }
 
-const adminRoutes = [
-  {
-    path: '/admin',
-    children: [
-        {
-            path: '',
-            name: 'Dashboard',
-            component: () => import('../views/Admin/Dashboard/Dashboard.vue'),
-            meta: {
-                title: 'Dashboard',
-            },
-        },
-        {
-            path: 'calendar',
-            name: 'Calendar',
-            component: () => import('../views/Admin/Calendar/Calendar.vue'),
-            meta: {
-                title: 'Calendar',
-            },
-        },
-        ]
-  }
-]
-
 const clientRoutes = [
   {
     path: '/client',
     children: [
         {
             path: '',
-            name: 'Signin',
-            component: () => import('../views/Client/Auth/Signin.vue'),
+            redirect: '/client/login'
+        },
+        {
+            path: 'login',
+            name: 'Login',
+            component: () => import('../views/Client/Auth/Login.vue'),
             meta: {
-                title: 'Signin',
+                title: 'Login',
+            },
+        },
+        {
+            path: 'logout',
+            name: 'Logout',
+            component: () => import('../views/Client/Auth/Logout.vue'),
+            meta: {
+                title: 'Logout',
+            },
+        },
+        {
+            path: 'reset-password',
+            name: 'ResetPassword',
+            component: () => import('../views/Client/Auth/ResetPassword.vue'),
+            meta: {
+                title: 'Reset Password',
             },
         },
         {
@@ -207,9 +203,120 @@ const clientRoutes = [
   }
 ]
 
+const adminRoutes = [
+  {
+    path: '/admin',
+    children: [
+        {
+            path: '',
+            redirect: '/admin/dashboard'
+        },
+        {
+            path: 'dashboard',
+            name: 'Dashboard',
+            component: () => import('../views/Admin/Dashboard/Dashboard.vue'),
+            meta: {
+                title: 'Dashboard',
+            },
+        },
+        {
+            path: 'profile',
+            name: 'Profile',
+            component: () => import('../views/Admin/Profile/Profile.vue'),
+            meta: {
+                title: 'Profile',
+            },
+        },
+        {
+            path: 'user',
+            children: [
+                {
+                    path: '',
+                    name: 'User List',
+                    component: () => import('../views/Admin/User/UserList.vue'),
+                    meta: {
+                        title: 'User List',
+                    },
+                },
+                {
+                    path: 'detail/:id',
+                    name: 'User Detail',
+                    component: () => import('../views/Admin/User/UserDetail.vue'),
+                    meta: {
+                        title: 'User Detail',
+                    },
+                },
+                {
+                    path: 'add',
+                    name: 'User Add',
+                    component: () => import('../views/Admin/User/UserAdd.vue'),
+                    meta: {
+                        title: 'User Add',
+                    },
+                },
+                {
+                    path: 'edit/:id',
+                    name: 'User Edit',
+                    component: () => import('../views/Admin/User/UserEdit.vue'),
+                    meta: {
+                        title: 'User Edit',
+                    },
+                }
+            ]
+        },
+        {
+            path: 'user-level',
+            children: [
+                {
+                    path: '',
+                    name: 'User Level List',
+                    component: () => import('../views/Admin/UserLevel/UserLevelList.vue'),
+                    meta: {
+                        title: 'User Level List',
+                    },
+                },
+                {
+                    path: 'detail/:id',
+                    name: 'User Level Detail',
+                    component: () => import('../views/Admin/UserLevel/UserLevelDetail.vue'),
+                    meta: {
+                        title: 'User Level Detail',
+                    },
+                },
+                {
+                    path: 'add',
+                    name: 'User Level Add',
+                    component: () => import('../views/Admin/UserLevel/UserLevelAdd.vue'),
+                    meta: {
+                        title: 'User Level Add',
+                    },
+                },
+                {
+                    path: 'edit/:id',
+                    name: 'User Level Edit',
+                    component: () => import('../views/Admin/UserLevel/UserLevelEdit.vue'),
+                    meta: {
+                        title: 'User Level Edit',
+                    },
+                }
+            ]
+        },
+        {
+            path: 'setting',
+            name: 'Setting List',
+            component: () => import('../views/Admin/Setting/SettingList.vue'),
+            meta: {
+                title: 'Setting List',
+            },
+        },
+    ]
+  }
+]
+
+
 const routes = [
-  ...adminRoutes,
   ...clientRoutes,
+  ...adminRoutes,
   { path: '/', redirect: '/client' } // default route
 ]
 
