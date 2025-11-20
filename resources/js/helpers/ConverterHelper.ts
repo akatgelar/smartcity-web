@@ -1,4 +1,4 @@
-export function convertDateTimeIndo(dateValue: string) {
+export function convertDateTimeIndo(dateValue: string | undefined) {
 
     if (dateValue) {
         const date = new Date(dateValue);
