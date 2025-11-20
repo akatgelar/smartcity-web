@@ -17,7 +17,6 @@ nano .env
 **Migration Database**
 
 ```
-
 php artisan migrate
 php artisan db:seed
 ```
@@ -28,6 +27,11 @@ php artisan db:seed
 composer run dev
 
 # open in browser localhost:8000
+
+# default user 
+'email' => 'admin@email.com',
+'username' => 'admin',
+'password' => 'rnPgxzQ3qJeyNWKMtSD5La',
 ```
 
 **Swagger**
