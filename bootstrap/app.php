@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use App\Exceptions\Handler;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -15,5 +16,14 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
-    })->create();
+
+        $exceptions->render(function (Throwable $exception, $request) {
+            if ($request->segment(1) == 'api' || $request->wantsJson()) {
+                return (new Handler())->customApiResponse($exception);
+            }
+            else {
+                return parent::render($request, $exception);
+            }
+        });
+    })
+    ->create();
