@@ -1,3 +1,4 @@
+import { ref } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router'
 
 // const router = createRouter({
@@ -145,6 +146,19 @@ import { createRouter, createWebHistory } from 'vue-router'
 // })
 
 
+declare global {
+  interface Window {
+    appSetting: {
+      name: string;
+      title: string;
+      tagline: string;
+      logo: string;
+      description: string;
+    };
+  }
+
+}
+
 const adminRoutes = [
   {
     path: '/admin',
@@ -208,8 +222,16 @@ const router = createRouter({
 })
 
 export default router
+const appSetting = ref(window.appSetting)
 
 router.beforeEach((to, from, next) => {
-  document.title = `Vue.js ${to.meta.title} | TailAdmin - Vue.js Tailwind CSS Dashboard Template`
-  next()
+    document.title = `${to.meta.title} | ${appSetting.value?.title}`
+    next()
 })
+
+// router.afterEach((to, from, next) => {
+//     const route = useRoute();
+//     if (route.path.startsWith("/admin")) {
+//         checkSession()
+//     }
+// })
