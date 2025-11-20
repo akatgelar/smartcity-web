@@ -22,7 +22,7 @@ class ApiResource extends JsonResource
      * @param  mixed $resource
      * @return void
      */
-    public function __construct($statusCode, $status, $message, $data, $metadata)
+    public function __construct($status, $statusCode, $message, $data, $metadata)
     {
         parent::__construct($data);
         $this->statusCode  = $statusCode;

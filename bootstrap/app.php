@@ -21,9 +21,6 @@ return Application::configure(basePath: dirname(__DIR__))
             if ($request->segment(1) == 'api' || $request->wantsJson()) {
                 return (new Handler())->customApiResponse($exception);
             }
-            else {
-                return parent::render($request, $exception);
-            }
         });
     })
     ->create();

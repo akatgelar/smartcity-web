@@ -14,7 +14,7 @@ Route::get("/test-me", function () {
 
     $metadata = [];
     $metadata['page'] = 1;
-    return new ApiResource(200, true, $message, $data, $metadata);
+    return new ApiResource(true, 200, $message, $data, $metadata);
 });
 
 Route::get('/send-email',function(){
@@ -33,21 +33,34 @@ Route::get('/send-email',function(){
         $message = 'Email send success';
         $data = [];
         $metadata = [];
-        return new ApiResource(200, true, $message, $data, $metadata);
+        return new ApiResource(true, 200, $message, $data, $metadata);
     } catch (Exception $ex) {
         print_r($ex);
 
         $message = $ex;
         $data = [];
         $metadata = [];
-        return new ApiResource(500, false, $message, $data, $metadata);
+        return new ApiResource(false, 500, $message, $data, $metadata);
     }
 });
 
-Route::get('/minio/get', [App\Http\Controllers\MinioController::class, 'get'])
-    // ->withoutMiddleware([Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class])
-;
 
-Route::post('/minio/upload', [App\Http\Controllers\MinioController::class, 'upload'])
-    // ->withoutMiddleware([Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class])
-;
+
+Route::post('/auth/register', [App\Http\Controllers\Api\AuthController::class, 'register']);
+Route::post('/auth/login', [App\Http\Controllers\Api\AuthController::class, 'login']);
+Route::get('/auth/verify/{token}', [App\Http\Controllers\Api\AuthController::class, 'verify']);
+
+Route::middleware([])->group(function () {
+    Route::apiResource('user', App\Http\Controllers\Api\UserController::class);
+    Route::apiResource('user_level', App\Http\Controllers\Api\UserLevelController::class);
+    Route::apiResource('setting', App\Http\Controllers\Api\SettingController::class);
+    Route::post('setting/bulk', [App\Http\Controllers\Api\SettingController::class, 'bulk']);
+
+    Route::get('/minio/get', [App\Http\Controllers\Api\MinioController::class, 'get'])
+        // ->withoutMiddleware([Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class])
+    ;
+
+    Route::post('/minio/upload', [App\Http\Controllers\Api\MinioController::class, 'upload'])
+        // ->withoutMiddleware([Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class])
+    ;
+});
