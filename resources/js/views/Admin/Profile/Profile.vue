@@ -1,6 +1,6 @@
 <template>
   <admin-layout>
-    <PageBreadcrumb parent-page="" parent-link="" child-page="" child-link="" />
+    <PageBreadcrumb parent-page="" parent-link="" child-page="" child-link="" page-title=""/>
 
     <div
       class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6"
