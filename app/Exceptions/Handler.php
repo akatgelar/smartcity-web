@@ -8,32 +8,27 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Throwable;
+use Illuminate\Support\Facades\Auth;
 
 class Handler
 {
-    public function handleApiException($request, Throwable $exception)
-    {
-        $exception = $this->prepareException($exception);
-
-        if ($exception instanceof HttpResponseException) {
-            $exception = $exception->getResponse();
-        }
-
-        if ($exception instanceof AuthenticationException) {
-            $exception = $this->unauthenticated($request, $exception);
-        }
-
-        if ($exception instanceof ValidationException) {
-            $exception = $this->convertValidationExceptionToResponse($exception, $request);
-        }
-
-        return $this->customApiResponse($exception);
-    }
 
     public function customApiResponse($exception)
     {
+        // dd($exception);
+        // dd([
+        //     'auth'       => $exception instanceof \Illuminate\Auth\AuthenticationException,
+        //     'validation' => $exception instanceof \Illuminate\Validation\ValidationException,
+        //     'notFound'   => $exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException,
+        // ]);
         if (method_exists($exception, 'getStatusCode')) {
             $statusCode = $exception->getStatusCode();
+        } else if (!Auth::guard('api')->check()) {
+            $statusCode = 401;
+        } else if ($exception instanceof \Illuminate\Validation\ValidationException) {
+            $statusCode = 422;
+        } else if ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
+            $statusCode = 404;
         } else {
             $statusCode = 500;
         }
@@ -44,7 +39,7 @@ class Handler
             'message' => 'Unknown error',
             'data' => [],
             'metadata' => [
-                'timestamp' => now()->toISOString(),
+                // 'timestamp' => now()->toISOString(),
             ],
         ];
 
