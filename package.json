@@ -39,6 +39,7 @@
         "vue-jwt-decode": "^0.1.0",
         "vue-kanban": "^1.8.0",
         "vue-router": "^4.5.1",
+        "vue-sweetalert2": "^5.0.11",
         "vue3-apexcharts": "^1.8.0",
         "vuedraggable": "^4.1.0",
         "vuevectormap": "^2.0.1"

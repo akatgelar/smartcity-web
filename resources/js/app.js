@@ -1,14 +1,4 @@
-// import './_bootstrap';
-// import router from "./router";
-// import { createApp } from "vue";
-
-// import App from "./App_.vue";
-
-// createApp(App).use(router).mount("#app");
-
-
 import './assets/main.css'
-// Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
@@ -19,10 +9,13 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router/index'
 import VueApexCharts from 'vue3-apexcharts'
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 const app = createApp(App)
 
 app.use(router)
 app.use(VueApexCharts)
+app.use(VueSweetalert2);
 
 app.mount('#app')
