@@ -61,7 +61,7 @@ jobs:
           host: ${{ secrets.VPS_IP }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
-          source: ./retrieved/docker-compose.yml
+          source: retrieved/docker-compose.yml
           target: /home/app/smartcity-web/
 
       - name: Running docker-compose script
