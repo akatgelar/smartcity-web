@@ -317,7 +317,15 @@ const adminRoutes = [
 const routes = [
   ...clientRoutes,
   ...adminRoutes,
-  { path: '/', redirect: '/client' } // default route
+  { path: '/', redirect: '/client' }, // default route
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: () => import('../views/Client/Errors/FourZeroFour.vue'),
+    meta: {
+        title: 'Not Found',
+    },
+  }
 ]
 
 const router = createRouter({
